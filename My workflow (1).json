@@ -1,0 +1,115 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "9d4fa3be-73c2-49fd-98ba-27d686506c1f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "609d7b7b-c6f8-4aff-8171-82e22ffc5838",
+      "name": "Webhook",
+      "webhookId": "9d4fa3be-73c2-49fd-98ba-27d686506c1f"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "Gemini 2.5 Flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert customer support agent for an AI automation consultancy.\n\nAnalyze the customer's message below and generate a friendly, professional, and high-converting email response.\n\nCustomer Inquiry:\n{{ $json.body.message || $json.headers[\"user-agent\"] }}\n\nRequirements:\n1. Address their core question clearly.\n2. Maintain a warm, encouraging, and highly professional tone.\n3. Keep it brief (under 150 words).\n4. End with a subtle call-to-action to schedule a call or reply to this email."
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "61e9b2f2-41fc-44b1-bf38-4854ef402511",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "8f3NWLSwih86U09f",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "2434141175@qq.com",
+        "subject": "Automated Response to Your Inquiry",
+        "message": "={{ $json.content.parts[0].text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        592,
+        0
+      ],
+      "id": "2bd8f561-e88a-4e19-b5c5-44473c489aad",
+      "name": "Send a message",
+      "webhookId": "8f3c61de-3f97-494d-9561-7bb2a328337b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "degibpa2VGv0qfeE",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "19ef8c4d-d89f-4a18-8e38-29dfbdc1590c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4252262f5f1f799638e3e98180601435b64f351088a2fed5a0d54260e9845b06"
+  },
+  "nodeGroups": [],
+  "id": "w5oU7OyrQS2loWMK",
+  "tags": []
+}
